@@ -1,5 +1,5 @@
 -module(test_erlang).
--export([perimeter/1, area/1, enclose/1, bits/1]).
+-export([perimeter/1, area/1, enclose/1, bits/1, dup/1]).
 
 %%%-------------------------------------------------------------------
 %% Define a function perimeter/1 which takes a shape and returns
@@ -57,3 +57,19 @@ bits(N, Acc) when N > 0 ->
 		1 -> bits(R, Acc + 1);
 		0 -> bits(R, Acc)
 	end.
+%%%-------------------------------------------------------------------
+%% Define a function dup to remove all the duplicate elements from a list.
+%% This could remove all repeated elements except the first instance, or all
+%% repeated elements except the final instance.
+%%%-------------------------------------------------------------------
+
+dup(L) ->
+  dup(L, []).
+
+dup([], Acc) ->
+  lists:reverse(Acc);
+dup([H|T], Acc) ->
+  case lists:member(H, Acc) of
+    true -> dup(T, Acc);
+    false -> dup(T, [H | Acc])
+  end.
