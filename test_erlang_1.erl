@@ -1,4 +1,4 @@
--module(test_erlang).
+-module(test_erlang_1).
 -export([perimeter/1, area/1, enclose/1, bits/1, dup/1]).
 
 %%%-------------------------------------------------------------------
@@ -42,7 +42,7 @@ enclose(S = {triangle, A, B, C}) ->
 	{rectangle, Height, Base}.
 
 %%%-------------------------------------------------------------------
-%% Define a function bits/1 that takes a positive integer N and returns 
+%% Define a function bits/1 that takes a positive integer N and returns
 %% the sum of the bits in the binary representation. For example bits(7)
 %% is 3 and bits(8) is 1.
 %%%-------------------------------------------------------------------

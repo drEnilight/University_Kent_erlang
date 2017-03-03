@@ -1,0 +1,2 @@
+-module(test_erlang_2).
+-export([]).
