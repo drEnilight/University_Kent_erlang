@@ -65,7 +65,6 @@ bits(N, Acc) when N > 0 ->
 
 dup(L) ->
   dup(L, []).
-
 dup([], Acc) ->
   lists:reverse(Acc);
 dup([H|T], Acc) ->
