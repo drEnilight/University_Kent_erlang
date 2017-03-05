@@ -7,17 +7,27 @@ word(Word) ->
     after file:close(Device)
   end.
 
+find_word([], Device, [WH|WT], Acc1, Acc2) ->
+  get_all_lines(Device, [WH|WT], Acc1);
+
+find_word(Line, Device, Word, Acc1, Acc2) ->
+  [LH | LT] = Line,
+  [WH | WT] = Word,
+  io:format("~p~n", [Line]),
+  case Acc2 /= length(Word) of 
+     true -> case LH == WH of
+    		    true -> find_word([LT], Device, [WT], Acc1, Acc2 + 1);
+    		    false -> find_word([LT], Device, Word, Acc1, 0)
+	      end;
+     false -> io:format("~p~n", [{Word, Acc1}]),
+	      get_all_lines(Device, Word, Acc1)
+  end.
+
 get_all_lines(Device, Word) ->
   get_all_lines(Device, Word, 0).
 
 get_all_lines(Device, Word, Acc) ->
   case io:get_line(Device, "") of
       eof  -> [];
-      Line -> Line ++ get_all_lines(Device, Word, Acc + 1, 0),
-              Res = {Word,Line},
-              io:format("~p~n", [Res])
+      Line -> find_word(Line, Device, Word, Acc, 0)
   end.
-
-find_word([LH|LT], Device, [WH|WT], Acc1, Acc2) ->
-  case LH == WH of
-    true -> find_word([LH|LT], Device, [WH|WT], Acc1, Acc2)
