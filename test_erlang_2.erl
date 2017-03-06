@@ -8,26 +8,14 @@ word(Word) ->
   end.
 
 get_all_lines(Device, Word) ->
-  get_all_lines(Device, Word, 0).
+  get_all_lines(Device, Word, {1, []}).
 
-get_all_lines(Device, Word, Acc) ->
+get_all_lines(Device, Word, {LineNumber, Entrancies}) ->
   case io:get_line(Device, "") of
-      eof  -> [];
-      Line -> Split_string = re:split(Line, " ", [{return, list}]),
-              find_word(Split_string, Device, Word, Acc)
-  end.
-
-find_word([], Device, Word, Acc1) ->
-  get_all_lines(Device, Word, Acc1);
-
-find_word(Line, Device, Word, Acc1) ->
-  [LH | LT] = Line,
-  [WH | WT] = Word.
-  case Acc2 /= length(Word) of
-    true -> case LH == WH of
-      true -> find_word([LT], Device, [WT], Acc1);
-      false -> find_word([LT], Device, Word, Acc1)
-    end;
-    false -> io:format("~p~n", [{Word, Acc1}]),
-             get_all_lines(Device, Word, Acc1)
+      eof  -> lists:reverse(Entrancies);
+      Line -> SplitedString = re:split(string:to_lower(Line), " ", [{return, list}]),
+              case lists:member(string:to_lower(Word), SplitedString) of
+                true -> get_all_lines(Device, Word, {LineNumber + 1, [{Word, LineNumber} | Entrancies]});
+                false -> get_all_lines(Device, Word, {LineNumber + 1, Entrancies})
+              end
   end.
